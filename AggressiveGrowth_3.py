@@ -25,7 +25,11 @@ class AggressiveGrowth(QCAlgorithm):
         self.AddEquity("TQQQ", Resolution.Daily)
         self.tqqq_ema = self.EMA("TQQQ", 15, Resolution.Daily)
 
-        self.Schedule.On(self.DateRules.EveryDay(), self.TimeRules.AfterMarketOpen("TSLA", 30), self.Trade)
+        self.Schedule.On(
+            self.DateRules.EveryDay(),
+            self.TimeRules.BeforeMarketClose("TQQQ", 30),  # 收盘前30分钟执行
+            self.Trade
+        )
 
     def Trade(self):
         # 市场情绪过滤（无TQQQ趋势，不交易）
